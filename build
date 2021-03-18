@@ -26,11 +26,9 @@ make_metalava(){
 
 make_rom(){
 	mka bacon -j16
-	if [ -f out/target/product/j4primelte/*zip ]; then
 		zip=$(up out/target/product/j4primelte/*zip)
 		echo " "
 		echo "$zip"
-        fi
 }
 make_metalava
 make_rom
