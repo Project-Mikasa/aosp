@@ -1,7 +1,7 @@
 env: # Environt variable to pass to all tasks
     CIRRUS_CLONE_DEPTH: 1 # No need to clone with whole history
     CIRRUS_WORKING_DIR: "/tmp/ci" # Where to clone repo
-    rclone_config: "ENCRYPTED[cd748227cb60043e7066e426e166988ff5b0fb70341bcb4f661b5c255f19e90f6cb144de4ffdfdd18f201b0028a59b3a]"
+    rclone_config: "ENCRYPTED[9a43c15471e4dc3c9b4ed68720ac24dff03f3481ce4bee0e982c22bc4aca7bf9bdc829173a232e64e58aa9305727b0ca]"
 
 task:
     name: nnippon
