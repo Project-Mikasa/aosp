@@ -5,7 +5,8 @@ rm -rf .repo & # lets remove unnecessary things, so that no storage issue can oc
 
 # Normal build steps
 . build/envsetup.sh
-lunch lineage_j4primelte-userdebug
+breakfast j4primelte
+croot
 export CCACHE_DIR=/tmp/ccache
 export CCACHE_EXEC=$(which ccache)
 export USE_CCACHE=1
@@ -25,8 +26,6 @@ make_metalava(){
 }
 
 make_rom(){
-	breakfast j4primelte
-        croot
         brunch j4primelte
 		zip=$(up out/target/product/j4primelte/*zip)
 		echo " "
