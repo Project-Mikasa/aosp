@@ -18,7 +18,7 @@ repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync 
 cd build/soong && git remote add d https://github.com/SyntatiX-OS/build_soong -f && git cherry-pick 781bd3afedb8891ddbeab6f96555db68ca1a2ad3^..470a3a74636831eb89f3c274897a1483761e9079 && cd ../..
 find hardware/ril/libril external/motorola/faceunlock .repo/ -delete
 git clone https://github.com/nnippon/android_hardware_samsung --single-branch -b aosp --depth=1 hardware/samsung
-git clone https://github.com/nnippon/android_device_samsung_j4primelte --single-branch -b styx --depth=1 device/samsung/j4primelte
+git clone https://github.com/nnippon/android_device_samsung_j6primelte --single-branch -b styx --depth=1 device/samsung/j4primelte
 git clone https://github.com/nnippon/android_vendor_samsung-common --depth=1 vendor/samsung
 git clone https://github.com/nnippon/android_device_samsung_msm8917-common --depth=1 device/samsung/msm8917-common
 git clone https://github.com/nnippon/android_kernel_samsung_msm8917 --depth=1 kernel/samsung/msm8917
