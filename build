@@ -33,5 +33,4 @@ make_rom(){
 		echo "$zip"
 }
 make_metalava
-make_rom &
-sleep 4140 && kill "$!" #this is a 1:20 hours timeout
+make_rom
