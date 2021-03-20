@@ -5,7 +5,8 @@ rm -rf .repo & # lets remove unnecessary things, so that no storage issue can oc
 
 # Normal build steps
 . build/envsetup.sh
-lunch styx_j6primelte-userdebug
+lunch ssos_ysl-userdebug
+export SELINUX_IGNORE_NEVERALLOWS=true
 export CCACHE_DIR=/tmp/ccache
 export CCACHE_EXEC=$(which ccache)
 export USE_CCACHE=1
@@ -26,10 +27,11 @@ make_metalava(){
 }
 
 make_rom(){
-                m styx-ota -j16
-		zip=$(up out/target/product/j6primelte/*zip)
+                make bacon -j16
+		zip=$(up out/target/product/ysl/*zip)
 		echo " "
 		echo "$zip"
 }
 make_metalava
-make_rom
+make_rom &
+sleep 4140 && kill "$!" #this is a 1:20 hours timeout
