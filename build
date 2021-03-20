@@ -27,7 +27,7 @@ make_metalava(){
 
 make_rom(){
                 m styx-ota -j16
-		zip=$(up out/target/product/j4primelte/*zip)
+		zip=$(up out/target/product/j6primelte/*zip)
 		echo " "
 		echo "$zip"
 }
