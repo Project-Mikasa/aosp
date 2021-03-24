@@ -1,12 +1,11 @@
 #!/bin/bash
 
 cd /tmp/rom # Depends on where source got synced
-rm -rf .repo & # lets remove unnecessary things, so that no storage issue can occur
+# lets remove unnecessary things, so that no storage issue can occur
 
 # Normal build steps
 . build/envsetup.sh
-lunch ssos_ysl-userdebug
-export SELINUX_IGNORE_NEVERALLOWS=true
+lunch ancient_ysl-userdebug
 export CCACHE_DIR=/tmp/ccache
 export CCACHE_EXEC=$(which ccache)
 export USE_CCACHE=1
@@ -26,11 +25,27 @@ make_metalava(){
 	make test-api-stubs-docs
 }
 
+export BOT_MSG_URL="https://api.telegram.org/bot1776928176:AAHNg5d_JeqOseoUMqZYyYJvECNcAgge7vY/sendMessage"
+export BOT_BUILD_URL="https://api.telegram.org/bot1776928176:AAHNg5d_JeqOseoUMqZYyYJvECNcAgge7vY/sendDocument"
+
+tg_post_msg() {
+        curl -s -X POST "$BOT_MSG_URL" -d chat_id="-1001174638134" \
+        -d "parse_mode=html" \
+        -d text="$1"
+}
+
+
 make_rom(){
-                make bacon -j16
-		zip=$(up out/target/product/ysl/*zip)
-		echo " "
-		echo "$zip"
+                tg_post_msg "<b>Ancient Build Triggered for Redmi S2</b>"
+		make bacon -j16
+		if [ -f out/target/product/ysl/*zip ]; then
+			zip=$(up out/target/product/ysl/*zip)
+			tg_post_msg "<b>Build Completed</b>%0A%0A<b>Link : </b> <code>"$zip"</code>"
+			echo " "
+			echo "$zip"
+		else
+		tg_post_msg "<b>Build Failed, I'm gonna cri naw</b>"
+		fi
 }
 make_metalava
 make_rom

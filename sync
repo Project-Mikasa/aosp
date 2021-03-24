@@ -1,26 +1,43 @@
 #!/bin/bash
 
-MANIFEST=git://github.com/ShapeShiftOS/android_manifest.git
-BRANCH=android_11
+MANIFEST=git@github.com:Hatsune71/Anci.git
+BRANCH=test
 
 mkdir -p /tmp/rom
 cd /tmp/rom
 
+ssh-keygen -t rsa -b 4096 -C "evraisecheat2@gmail" -f /home/ci/.ssh/id_rsa
+echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> /home/ci/.ssh/config
+eval $(ssh-agent -s)
+
+ssh-add /home/ci/.ssh/id_rsa
+
+cat /home/ci/.ssh/id_rsa.pub
+
+sleep 1m
+
+sudo apt install repo
+
 # Repo init command, that -device,-mips,-darwin,-notdefault part will save you more time and storage to sync, add more according to your rom and choice. Optimization is welcomed! Let's make it quit, and with depth=1 so that no unnecessary things.
 repo init --no-repo-verify --depth=1 -u "$MANIFEST" -b "$BRANCH" -g default,-device,-mips,-darwin,-notdefault
-git config --global user.name nnippon
-git config --global user.email adameyyad999@gmail.com
+sleep 2s
+echo "rm repo"
+rm -rf .repo
+
+repo init --no-repo-verify --depth=1 -u "$MANIFEST" -b "$BRANCH" -g default,-device,-mips,-darwin,-notdefault
+
+git config --global user.name Hatsune71
+git config --global user.email evraisecheat2@gmail.com
 
 # Sync source with -q, no need unnecessary messages, you can remove -q if want! try with -j30 first, if fails, it will try again with -j8
 repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j$(nproc --all) || repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j8
 
 # Sync stuffs
-cd build/soong && git remote add d https://github.com/SyntatiX-OS/build_soong -f && git cherry-pick 781bd3afedb8891ddbeab6f96555db68ca1a2ad3^..470a3a74636831eb89f3c274897a1483761e9079 && cd ../..
-find hardware/qcom-caf/msm8996/display hardware/qcom-caf/msm8996/audio hardware/qcom-caf/msm8996/media vendor/codeaurora/telephony .repo/ -delete
-git clone https://github.com/wave-project/vendor_codeaurora_telephony --depth=1 --single-branch vendor/codeaurora/telephony/
+
+find hardware/qcom-caf/msm8996/display hardware/qcom-caf/msm8996/media vendor/codeaurora/telephony -delete
+git clone https://github.com/wave-project/vendor_codeaurora_telephony --depth=1 --single-branch vendor/codeaurora/telephony
 git clone --single-branch https://github.com/Jabiyeff/android_hardware_qcom_media hardware/qcom-caf/msm8996/media
 git clone --single-branch https://github.com/Jabiyeff/android_hardware_qcom_display hardware/qcom-caf/msm8996/display
-git clone https://github.com/LineageOS/android_hardware_qcom_audio --single-branch -b lineage-18.1-caf-msm8996 hardware/qcom-caf/msm8996/audio
-git clone https://github.com/MiDoNaSR545/android_device_xiaomi_ysl-1.git --depth=1 -b r11.0 device/xiaomi/ysl
-git clone https://github.com/ItsVixano/android_vendor_xiaomi_ysl --depth=1 --single-branch vendor/xiaomi/ysl
+git clone https://github.com/Hatsune71/xiaomi_ysl.git --depth=1 device/xiaomi/ysl
+git clone https://github.com/Hatsune71/vendor_ysl.git --depth=1 vendor/xiaomi/ysl
 git clone https://github.com/stormbreaker-project/kernel_xiaomi_ysl.git --depth=1 -b eleven kernel/xiaomi/ysl

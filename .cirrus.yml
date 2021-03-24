@@ -1,11 +1,11 @@
 env: # Environt variable to pass to all tasks
     CIRRUS_CLONE_DEPTH: 1 # No need to clone with whole history
     CIRRUS_WORKING_DIR: "/tmp/ci" # Where to clone repo
-    rclone_config: "ENCRYPTED[9a43c15471e4dc3c9b4ed68720ac24dff03f3481ce4bee0e982c22bc4aca7bf9bdc829173a232e64e58aa9305727b0ca]"
+    #rclone_config: "ENCRYPTED[9a43c15471e4dc3c9b4ed68720ac24dff03f3481ce4bee0e982c22bc4aca7bf9bdc829173a232e64e58aa9305727b0ca]"
 
 task:
-    name: nnippon
-    timeout_in: 120m
+    name: Hatsune71
+    timeout_in: 240m
     container:
       image: apon77/aosp:latest
       cpu: 16
@@ -18,3 +18,4 @@ task:
       - ./build
     upload_ccache_script:
       - ./upload_ccache
+      
