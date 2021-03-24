@@ -34,10 +34,11 @@ repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync 
 
 # Sync stuffs
 
-find hardware/qcom-caf/msm8996/display hardware/qcom-caf/msm8996/media vendor/codeaurora/telephony -delete
+find hardware/qcom-caf/msm8996/display hardware/qcom-caf/msm8996/media vendor/codeaurora/telephony system/sepolicy -delete
 git clone https://github.com/wave-project/vendor_codeaurora_telephony --depth=1 --single-branch vendor/codeaurora/telephony
 git clone --single-branch https://github.com/Jabiyeff/android_hardware_qcom_media hardware/qcom-caf/msm8996/media
 git clone --single-branch https://github.com/Jabiyeff/android_hardware_qcom_display hardware/qcom-caf/msm8996/display
 git clone https://github.com/Hatsune71/xiaomi_ysl.git --depth=1 device/xiaomi/ysl
 git clone https://github.com/Hatsune71/vendor_ysl.git --depth=1 vendor/xiaomi/ysl
 git clone https://github.com/stormbreaker-project/kernel_xiaomi_ysl.git --depth=1 -b eleven kernel/xiaomi/ysl
+git clone git@github.com:Hatsune71/sepolicy.git --depth=1 system/sepolicy
