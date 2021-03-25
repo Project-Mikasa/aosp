@@ -47,5 +47,5 @@ make_rom(){
 		tg_post_msg "<b>Build Failed, I'm gonna cri naw</b>"
 		fi
 }
-make_metalava
+
 make_rom
