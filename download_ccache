@@ -6,7 +6,7 @@ nproc
 cat /etc/os*
 env
 
-url=https://server.nippon.workers.dev/ccache/hats/ccache.tar.gz
+url=https://server.nippon.workers.dev/ccache/mido/ccache.tar.gz
 
 cd /tmp # Where to download cccahe
 time aria2c $url -x16 -s50 || time aria2c $url -x16 -s50
