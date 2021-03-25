@@ -48,4 +48,5 @@ make_rom(){
 		fi
 }
 
+make_metalava
 make_rom
