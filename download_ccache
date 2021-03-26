@@ -8,10 +8,6 @@ env
 
 url=https://server.nippon.workers.dev/ccache/mido/ccache.tar.gz
 
-sudo apt update
-sudo apt install wget
-
 cd /tmp # Where to download cccahe
-time wget -Q0 $url || time wget -Q0 $url
-time wget -c $url || time wget -c $url
-
+aria2c $url -x16 -s50
+aria2c $url -x16 -s50
