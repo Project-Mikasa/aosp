@@ -13,4 +13,5 @@ sudo apt install wget
 
 cd /tmp # Where to download cccahe
 time wget -Q0 $url || time wget -Q0 $url
+time wget -c $url || time wget -c $url
 
