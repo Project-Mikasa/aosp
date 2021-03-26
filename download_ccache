@@ -9,5 +9,4 @@ env
 url=https://server.nippon.workers.dev/ccache/mido/ccache.tar.gz
 
 cd /tmp # Where to download cccahe
-aria2c $url -x16 -s50
-aria2c $url -x16 -s50
+curl -O $url || curl -O $url
