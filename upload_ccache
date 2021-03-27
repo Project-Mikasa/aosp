@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /tmp/prebuilts/tools-ancient/linux-x86/bin/ccache
+cd /tmp
 
 # Compress function with pigz for faster compression
 com () 
