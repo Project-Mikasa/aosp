@@ -6,7 +6,7 @@ cd /tmp/rom # Depends on where source got synced
 # Normal build steps
 . build/envsetup.sh
 lunch ancient_ysl-user
-export CCACHE_DIR=/tmp/rom/prebuilts/tools-ancient/linux-x86/bin/ccache
+export CCACHE_DIR=/tmp/ccache
 export CCACHE_EXEC=$(which ccache)
 export USE_CCACHE=1
 ccache -M 50G
