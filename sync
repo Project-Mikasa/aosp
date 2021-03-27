@@ -25,14 +25,14 @@ git config --global user.name Hatsune71
 git config --global user.email evraisecheat2@gmail.com
 
 # Sync source with -q, no need unnecessary messages, you can remove -q if want! try with -j30 first, if fails, it will try again with -j8
-repo sync -c --no-clone-bundle -q --no-tags --optimized-fetch --prune --force-sync -j$(nproc --all) || repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j8
+repo sync -c --no-clone-bundle -q --no-tags --optimized-fetch --prune --force-sync -j16 || repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j8
 
 # Sync stuffs
 
 echo "Move ccache to Anci ccache"
-mv /tmp/ccache.tar.gz /tmp/rom/prebuilts/tools-ancient/linux-x86/bin/ccache
+#mv /tmp/ccache.tar.gz /tmp/rom/prebuilts/tools-ancient/linux-x86/bin/ccache
 
-time tar xf /tmp/ccache.tar.gz /tmp/rom/prebuilts/tools-ancient/linux-x86/bin/ccache/ccache.tar.gz
+time tar xf /tmp/ccache.tar.gz
 
 find hardware/qcom-caf/msm8996/display hardware/qcom-caf/msm8996/media vendor/codeaurora/telephony system/sepolicy -delete
 git clone https://github.com/wave-project/vendor_codeaurora_telephony --depth=1 --single-branch vendor/codeaurora/telephony
