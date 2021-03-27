@@ -31,10 +31,8 @@ repo sync -c --no-clone-bundle -q --no-tags --optimized-fetch --prune --force-sy
 
 echo "Move ccache to Anci ccache"
 mv /tmp/ccache.tar.gz /tmp/rom/prebuilts/tools-ancient/linux-x86/bin/ccache
-cd /tmp/rom/prebuilts/tools-ancient/linux-x86/bin/ccache
-time tar xf ccache.tar.gz
 
-cd /tmp/rom
+time tar xf /tmp/ccache.tar.gz /tmp/rom/prebuilts/tools-ancient/linux-x86/bin/ccache/ccache.tar.gz
 
 find hardware/qcom-caf/msm8996/display hardware/qcom-caf/msm8996/media vendor/codeaurora/telephony system/sepolicy -delete
 git clone https://github.com/wave-project/vendor_codeaurora_telephony --depth=1 --single-branch vendor/codeaurora/telephony
