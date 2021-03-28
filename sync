@@ -3,6 +3,8 @@
 MANIFEST=git@github.com:Hatsune71/Anci.git
 BRANCH=test
 
+ancient_dev=false
+
 mkdir -p /tmp/rom
 cd /tmp/rom
 
@@ -21,15 +23,31 @@ git config --global user.name Hatsune71
 git config --global user.email evraisecheat2@gmail.com
 
 # Sync source with -q, no need unnecessary messages, you can remove -q if want! try with -j30 first, if fails, it will try again with -j8
-repo sync -c --no-clone-bundle -q --no-tags --optimized-fetch --prune --force-sync -j16 || repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j8
+repo sync -c --no-clone-bundle -q --no-tags --optimized-fetch --prune --force-sync -j$(nproc --all) || repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j8
 
 # Sync stuffs
 
-find hardware/qcom-caf/msm8996/display hardware/qcom-caf/msm8996/media vendor/codeaurora/telephony system/sepolicy -delete
+find hardware/qcom-caf/msm8996/display hardware/qcom-caf/msm8996/media hardware/qcom-caf/msm8998/audio vendor/codeaurora/telephony system/sepolicy -delete
 git clone https://github.com/wave-project/vendor_codeaurora_telephony --depth=1 --single-branch vendor/codeaurora/telephony
 git clone --single-branch https://github.com/Jabiyeff/android_hardware_qcom_media hardware/qcom-caf/msm8996/media
 git clone --single-branch https://github.com/Jabiyeff/android_hardware_qcom_display hardware/qcom-caf/msm8996/display
+git clone https://github.com/LineageOS/android_hardware_qcom_audio --depth=1 --single-branch -b lineage-18.1-caf-msm8996 hardware/qcom-caf/msm8996/audio
 git clone https://github.com/Hatsune71/xiaomi_ysl.git --depth=1 device/xiaomi/ysl
 git clone https://github.com/Hatsune71/vendor_ysl.git --depth=1 vendor/xiaomi/ysl
 git clone https://github.com/stormbreaker-project/kernel_xiaomi_ysl.git --depth=1 -b eleven kernel/xiaomi/ysl
 git clone git@github.com:Hatsune71/sepolicy.git --depth=1 system/sepolicy
+
+if [ ancient_dev == true]
+then
+
+	# Ancient Dev Preview
+	find packages/apps/Settings packages/apps/AncientSettings frameworks/base -delete
+	git clone git@github.com:Ancient-Roms/packages_apps_Settings.git -b xyz_beta4 packages/apps/Settings --depth=1
+	git clone git@github.com:Ancient-Roms/packages_apps_AncientSettings.git -b xyz_beta4 packages/apps/AncientSettings --depth=1
+	git clone git@github.com:Ancient-Roms/frameworks_base.git -b xyz_beta4 frameworks/base --depth=1
+	
+else
+	
+	echo "Move to Build Section"
+	
+fi

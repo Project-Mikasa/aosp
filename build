@@ -1,50 +1,129 @@
 #!/bin/bash
 
+# Define rclone Config use init_rclone flags
+init_rclone=true
+mkdir -p ~/.config/rclone
+echo "$rclone_config" > ~/.config/rclone/rclone.conf
+
+cat ~/.config/rclone/rclone.conf
+
 cd /tmp/rom # Depends on where source got synced
 # lets remove unnecessary things, so that no storage issue can occur
 
 # Normal build steps
+ROM_NAME=Ancient
+BRANCH_MANIFEST=$BRANCH
+DEVICE=ysl
+target_command="mka bacon -j16"
+BUILDLOG="$CDIR/out/${ROM_NAME}-${DEVICE}.log"
 . build/envsetup.sh
 lunch ancient_ysl-user
 export CCACHE_DIR=/tmp/ccache
 export CCACHE_EXEC=$(which ccache)
 export USE_CCACHE=1
-ccache -M 50G
+ccache -M 100G
 ccache -o compression=true
 ccache -z
 
 # stuffs
+function startTele() {
+	    sendInfo \
+	        "<b>====== Starting Build ROM ======</b>" \
+		"<b>ROM Name      :</b> <code>${ROM_NAME}</code>" \
+		"<b>Branch        :</b> <code>${BRANCH_MANIFEST}</code>" \
+		"<b>Device        :</b> <code>${DEVICE}</code>" \
+		"<b>Command       :</b> <code>${target_command}</code>" \
+		"<b>Started at    :</b> <code> $(uname -a)</code>" \
+		"<b>Instance Uptime :</b> <code> $(uptime -p)</code>" \
+		"<b>====== Starting Build ROM ======</b>"
+}
+
+function statusBuild() {
+    if [[ $retVal -ne 0 ]]; then
+            sendInfo "<b>====== Build ROM Failed ======</b>" \
+             "Build failed ."
+             echo " ***** Build Failed *****  "
+        sendLog "$BUILDLOG"
+        exit $retVal
+    fi
+    if [[ $retVal -eq 141 ]]; then
+            sendInfo "<b>====== Build ROM Aborted ======</b>" \
+            "Build failed ."
+            echo " ***** Build Aborted *****  "
+            exit $retVal
+    fi
+    if [[ $retVal -eq 20 ]]; then
+            sendInfo "<b>====== Build ROM Aborted ======</b>" \
+            "Build failed ."
+            echo "Telegram vars aren't configure yet.. "
+            echo " ***** Build Aborted *****  "
+            exit $retVal
+    fi
+    if [[ $retVal -eq 40 ]]; then
+            sendInfo "<b>====== Build ROM Aborted ======</b>" \
+            "Build failed ." \
+            "Sourceforge is not configured, please check again.."
+            echo " ***** Build Aborted *****  "
+            exit $retVal
+    fi
+    PATHJSON=$(find $OUT -name "$ROM_NAME*.json")
+    sendTele "$PATHJSON"
+    sendInfo \
+    "Build Successfull. "
+	"Link File : https://hats-drive.radrive29.workers.dev/test/rom/$lery " \
+    "<b>====== Build ROM Completed ======</b>"
+}
+
+function sendInfo() {
+	curl -s -X POST https://api.telegram.org/bot$BOT/sendMessage -d chat_id=$CHAT -d "parse_mode=HTML" -d text="$(
+		for POST in "${@}"; do
+			echo "${POST}"
+		done
+	)" &> /dev/null
+}
+
+function sendLog() {
+	curl -F chat_id=$CHAT -F document=@"$1" https://api.telegram.org/bot$BOT/sendDocument &>/dev/null
+}
+
+function sendTele() {
+	curl -F chat_id=$CHAT -F document=@"$1" https://api.telegram.org/bot$BOT/sendDocument &>/dev/null
+}
+
+zip(){
+	cd out/target/product/ysl
+	lery=$(find Ancient*.zip)
+	cd /tmp/rom
+}
+
 up(){
-	curl --upload-file $1 https://transfer.sh/
+	time rclone copy out/target/product/ysl/*zip drive:test/rom -P
 }
 
 make_metalava(){
-	tg_post_msg "<b>Ancient Build Triggered for Redmi S2</b>"
 	make api-stubs-docs
 	make hiddenapi-lists-docs
 	make system-api-stubs-docs
 	make test-api-stubs-docs
 }
 
-export BOT_MSG_URL="https://api.telegram.org/bot$BOT/sendMessage"
-export BOT_BUILD_URL="https://api.telegram.org/bot$BOT/sendDocument"
-
-tg_post_msg() {
-        curl -s -X POST "$BOT_MSG_URL" -d chat_id="$CHAT" \
-        -d "parse_mode=html" \
-        -d text="$1"
-}
-
 
 make_rom(){
-		make bacon -j16
+		startTele
+		mkfifo reading
+		tee "${BUILDLOG}" < reading & make bacon -j16 > reading
 		if [ -f out/target/product/ysl/*zip ]; then
-			zip=$(up out/target/product/ysl/*zip)
-			tg_post_msg "<b>Build Completed</b>%0A%0A<b>Link : </b> <code>"$zip"</code>"
-			echo " "
-			echo "$zip"
+			zip
+			up
+			# Record exit code after build
+			retVal=$?
+			statusBuild
+			sendLog "$BUILDLOG"
 		else
-		tg_post_msg "<b>Build Failed, I'm gonna cri naw</b>"
+		# Record exit code after build
+			retVal=$?
+			statusBuild
+			sendLog "$BUILDLOG"
 		fi
 }
 

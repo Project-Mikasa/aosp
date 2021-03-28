@@ -10,6 +10,10 @@ com ()
 
 time com ccache 1 # Compression level 1, its enough
 
-mkdir -p ~/.config/rclone
-echo "$rclone_config" > ~/.config/rclone/rclone.conf
-time rclone copy ccache.tar.gz gdrive:ccache/hats -P
+if [ $init_rclone==true ]
+then 
+	time rclone copy ccache.tar.gz drive:ccache/hats/anci -P
+else
+	mkdir -p ~/.config/rclone
+	echo "$rclone_config" > ~/.config/rclone/rclone.conf
+fi
