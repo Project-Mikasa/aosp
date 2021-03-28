@@ -19,24 +19,24 @@ up(){
 }
 
 make_metalava(){
+	tg_post_msg "<b>Ancient Build Triggered for Redmi S2</b>"
 	make api-stubs-docs
 	make hiddenapi-lists-docs
 	make system-api-stubs-docs
 	make test-api-stubs-docs
 }
 
-export BOT_MSG_URL="https://api.telegram.org/bot1776928176:AAHNg5d_JeqOseoUMqZYyYJvECNcAgge7vY/sendMessage"
-export BOT_BUILD_URL="https://api.telegram.org/bot1776928176:AAHNg5d_JeqOseoUMqZYyYJvECNcAgge7vY/sendDocument"
+export BOT_MSG_URL="https://api.telegram.org/bot$BOT/sendMessage"
+export BOT_BUILD_URL="https://api.telegram.org/bot$BOT/sendDocument"
 
 tg_post_msg() {
-        curl -s -X POST "$BOT_MSG_URL" -d chat_id="-1001174638134" \
+        curl -s -X POST "$BOT_MSG_URL" -d chat_id="$CHAT" \
         -d "parse_mode=html" \
         -d text="$1"
 }
 
 
 make_rom(){
-                tg_post_msg "<b>Ancient Build Triggered for Redmi S2</b>"
 		make bacon -j16
 		if [ -f out/target/product/ysl/*zip ]; then
 			zip=$(up out/target/product/ysl/*zip)
@@ -49,4 +49,4 @@ make_rom(){
 }
 
 make_metalava
-make_rom
+make_rom & sleep 4140 && kill "$!" #this is a 1:20 hours timeout

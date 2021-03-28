@@ -10,4 +10,6 @@ com ()
 
 time com ccache 1 # Compression level 1, its enough
 
-time curl --upload-file ccache.tar.gz https://transfer.sh/
+mkdir -p ~/.config/rclone
+echo "$rclone_config" > ~/.config/rclone/rclone.conf
+time rclone copy ccache.tar.gz gdrive:ccache/hats -P

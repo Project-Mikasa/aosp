@@ -1,7 +1,10 @@
 env: # Environt variable to pass to all tasks
     CIRRUS_CLONE_DEPTH: 1 # No need to clone with whole history
     CIRRUS_WORKING_DIR: "/tmp/ci" # Where to clone repo
-    #rclone_config: "ENCRYPTED[9a43c15471e4dc3c9b4ed68720ac24dff03f3481ce4bee0e982c22bc4aca7bf9bdc829173a232e64e58aa9305727b0ca]"
+    rclone_config: "ENCRYPTED[407b0c2ceb3541bf98e8186aafa3b36389df3e752405cad4d6c3e500612558a49104808faee054535f84db7140e12711]"
+    RSA: "ENCRYPTED[707298372d14cca5dc7ce83d9a7d435e44bf0d5e4114bf792b133ad44a600a1136014437ec2f6f488d27ab33700d32c3]"
+    CHAT: "ENCRYPTED[38e335a198135c696b3d8cc0f15b86ceea4d0f69171a9357e806ae9a8ad942f3db16fd74642a2f11b73404e5360d0a93]"
+    BOT: "ENCRYPTED[904fb548bacc3f7e30948c9befc6241006ec5891818faa6fd7b18e09b4a504bf5bdf80573dae205a935adc9a37019a61]"
 
 task:
     name: Hatsune71
@@ -10,8 +13,8 @@ task:
       image: apon77/aosp:latest
       cpu: 16
       memory: 24G
-    download_ccache_background_script:
-      - ./download_ccache
+    #download_ccache_background_script:
+    #  - ./download_ccache
     sync_script:
       - ./sync
     build_script:

@@ -6,17 +6,13 @@ BRANCH=test
 mkdir -p /tmp/rom
 cd /tmp/rom
 
-ssh-keygen -t rsa -b 4096 -C "evraisecheat2@gmail" -f /home/ci/.ssh/id_rsa
+mkdir -p /home/ci/.ssh
+echo "$RSA" > /home/ci/.ssh/id_rsa
+sudo chmod 700 /home/ci/.ssh/id_rsa
 echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> /home/ci/.ssh/config
 eval $(ssh-agent -s)
 
 ssh-add /home/ci/.ssh/id_rsa
-
-cat /home/ci/.ssh/id_rsa.pub
-
-sleep 1m
-
-sudo apt install repo
 
 # Repo init command, that -device,-mips,-darwin,-notdefault part will save you more time and storage to sync, add more according to your rom and choice. Optimization is welcomed! Let's make it quit, and with depth=1 so that no unnecessary things.
 repo init --no-repo-verify --depth=1 -u "$MANIFEST" -b "$BRANCH" -g default,-device,-mips,-darwin,-notdefault || repo init --no-repo-verify --depth=1 -u "$MANIFEST" -b "$BRANCH" -g default,-device,-mips,-darwin,-notdefault
