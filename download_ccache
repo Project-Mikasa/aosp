@@ -6,8 +6,10 @@ nproc
 cat /etc/os*
 env
 
-url=https://server.nippon.workers.dev/ccache/mido/ccache.tar.gz
+url=https://server.midonasr.workers.dev/hats/ccache.tar.gz
 
-cd /tmp # Where to download cccahe
-time curl -O --max-filesize 0 $url || aria2c $url
-time tar xf /tmp/ccache.tar.gz
+cd /tmp
+
+time aria2c $url -x16 -s50 || time aria2c $url -x16 -s50
+time tar xf ccache.tar.gz
+find ccache.tar.gz -delete
